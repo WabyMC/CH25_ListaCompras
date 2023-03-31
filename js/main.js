@@ -21,6 +21,8 @@ let contador =0;
 let totalEnProductos =0;
 let costoTotal =0;
 
+let datos = []; //aquí se almacenarán los datos de la tabla
+
 //Limpiar campos
 btnClear.addEventListener("click", function (event) {
     event.preventDefault();
@@ -98,6 +100,17 @@ btnAgregar.addEventListener("click", function (event) {
                     <td>${txtNumber.value}</td>
                     <td>${precio}</td>
                 </tr>`;
+
+        let elemento = `{
+                         "id": ${contador},
+                         "nombre": "${txtNombre.value}",
+                         "cantidad": "${txtNumber.value}",   
+                         "precio": "${precio}"
+                         }`;
+        datos.push( JSON.parse(elemento) );
+
+        localStorage.setItem("datos", JSON.stringify(datos));
+
         cuerpoTabla[0].insertAdjacentHTML("beforeend", row);
         contadorProductos.innerText=contador;
         totalEnProductos += parseFloat(txtNumber.value);
@@ -135,6 +148,20 @@ window.addEventListener("load", function(event){
         localStorage.setItem("resumen", resumen);
     }//if
     let res =JSON.parse(localStorage.getItem("resumen"));
+    if (localStorage.getItem("datos")!= null ){
+        datos = JSON.parse(localStorage.getItem("datos"));
+        datos.forEach(r => {
+            let row = `<tr>
+                <th>${r.id}</th>
+                <td>${r.nombre}</td>
+                <td>${r.cantidad}</td>
+                <td>${r.precio}</td>
+            </tr>`;
+            cuerpoTabla[0].insertAdjacentHTML("beforeend", row);
+        });
+    } // != null 
+
+
     // if (localStorage.getItem("contadorProductos")==null){
     //     localStorage.setItem("contadorProductos", "0");
     // }//if
