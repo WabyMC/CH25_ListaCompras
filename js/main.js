@@ -104,9 +104,13 @@ btnAgregar.addEventListener("click", function (event) {
         productosTotal.innerText=totalEnProductos;
         costoTotal += precio * parseFloat(txtNumber.value);
         precioTotal.innerText = `$ ${costoTotal.toFixed(2)}`;
-        localStorage.setItem("contadorProductos",contador);
-        localStorage.setItem("totalEnProductos", totalEnProductos);
-        localStorage.setItem("costoTotal", costoTotal.toFixed(2));      
+        let resumen = `{"contadorProductos" : ${contador},
+                        "totalEnProductos"  : ${totalEnProductos},
+                        "costoTotal"        : ${costoTotal.toFixed(2)} }`;
+        localStorage.setItem("resumen", resumen);
+        // localStorage.setItem("contadorProductos",contador);
+        // localStorage.setItem("totalEnProductos", totalEnProductos);
+        // localStorage.setItem("costoTotal", costoTotal.toFixed(2));      
         txtNombre.value="";
         txtNumber.value="";
         txtNombre.focus();
@@ -124,19 +128,25 @@ txtNombre.addEventListener("blur", function(event){
 });// txtNombre.blur
 
 window.addEventListener("load", function(event){
-    if (localStorage.getItem("contadorProductos")==null){
-        localStorage.setItem("contadorProductos", "0");
+    if (localStorage.getItem("resumen")==null){
+        let resumen = `{"contadorProductos" : ${contador},
+        "totalEnProductos"  : ${totalEnProductos},
+        "costoTotal"        : ${costoTotal.toFixed(2)} }`;
+        localStorage.setItem("resumen", resumen);
     }//if
-    if (localStorage.getItem("totalEnProductos")==null){
-        localStorage.setItem("totalEnProductos", "0");
-    }//if
-    if (localStorage.getItem("costoTotal")==null){
-        localStorage.setItem("ccostoTotal", "0.0");
-    }//if
-    contador = parseInt (localStorage.getItem("contadorProductos"));
-    totalEnProductos = parseInt (localStorage.getItem("totalEnProductos"));
-    costoTotal = parseFloat(localStorage.getItem("costoTotal"));
-
+    let res =JSON.parse(localStorage.getItem("resumen"));
+    // if (localStorage.getItem("contadorProductos")==null){
+    //     localStorage.setItem("contadorProductos", "0");
+    // }//if
+    // if (localStorage.getItem("totalEnProductos")==null){
+    //     localStorage.setItem("totalEnProductos", "0");
+    // }//if
+    // if (localStorage.getItem("costoTotal")==null){
+    //     localStorage.setItem("ccostoTotal", "0.0");
+    // }//if
+    contador = res.contadorProductos; //parseInt (localStorage.getItem("contadorProductos"));
+    totalEnProductos =res.totalEnProductos; //parseInt (localStorage.getItem("totalEnProductos"));
+    costoTotal =res.costoTotal; //parseFloat(localStorage.getItem("costoTotal"));
     contadorProductos.innerText=contador;
     productosTotal.innerText=totalEnProductos;
     precioTotal.innerText= `$ ${costoTotal}`;
